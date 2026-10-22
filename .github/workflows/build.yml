@@ -13,10 +13,13 @@ jobs:
       - name: Unzip project
         run: unzip -oq RiyalTrack_Android_Starter.zip
 
-      - name: Fix Java version setting
+      - name: Fix project settings and code
         working-directory: RiyalTrack_Android
         run: |
           sed -i 's/buildFeatures { compose = true }/buildFeatures { compose = true }\n    compileOptions {\n        sourceCompatibility = JavaVersion.VERSION_17\n        targetCompatibility = JavaVersion.VERSION_17\n    }/' app/build.gradle.kts
+          F=app/src/main/java/com/riyaltrack/app/MainActivity.kt
+          sed -i 's/^import androidx.activity.ComponentActivity$/import androidx.activity.ComponentActivity\nimport androidx.activity.compose.setContent/' $F
+          sed -i 's/Uri.parse(receiptUri)/Uri.parse(receiptUri.orEmpty())/' $F
 
       - uses: actions/setup-java@v4
         with:
